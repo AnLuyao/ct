@@ -56,6 +56,7 @@ public class CountDurationMapper extends TableMapper<CommDimension, Text> {
 
         //0x_13651234567_2019-02-21 13:13:13_13891234567_1_0180
         String rowkey = Bytes.toString(value.getRow());
+        System.out.println(rowkey);
 
         String[] split = rowkey.split("_");
 
@@ -77,44 +78,43 @@ public class CountDurationMapper extends TableMapper<CommDimension, Text> {
         //设置value的值
         v.set(duration);
 
-        CommDimension commDimension = new CommDimension();
+        CommDimension commMapper = new CommDimension();
 
-        //第一个联系人维度封装
+        //call1维度封装
         ContactDimension contactDimension = new ContactDimension();
-        contactDimension.setName(phoneName.get(call1));
         contactDimension.setPhoneNum(call1);
+        contactDimension.setName(phoneName.get(call1));
+        System.out.println("维度: 主叫人:" + call1 + "\t" + phoneName.get(call1));
 
-        //年维度
-        DateDimension yearDimension = new DateDimension(year, "-1", "-1");
-        commDimension.setContactDimension(contactDimension);
-        commDimension.setDateDimension(yearDimension);
-        context.write(commDimension,v);
+        DateDimension yearMapper = new DateDimension(year, "-1", "-1");
+        commMapper.setContactDimension(contactDimension);
+        commMapper.setDateDimension(yearMapper);
+        //年维度书写
+        context.write(commMapper,v);
 
-        //月维度
-        DateDimension monthDimension = new DateDimension(year, month, "-1");
-        commDimension.setDateDimension(monthDimension);
-        context.write(commDimension,v);
+        DateDimension monthMapper = new DateDimension(year, month, "-1");
+        commMapper.setDateDimension(monthMapper);
+        //月维度书写
+        context.write(commMapper,v);
+        DateDimension dayMapper = new DateDimension(year, month,day);
+        commMapper.setDateDimension(dayMapper);
+        //日维度书写
+        context.write(commMapper,v);
 
-        //天维度
-        DateDimension dayDimension = new DateDimension(year, month, day);
-        commDimension.setDateDimension(dayDimension);
-        context.write(commDimension,v);
 
-        //第二个联系人维度封装
-        contactDimension.setName(phoneName.get(call2));
         contactDimension.setPhoneNum(call2);
+        contactDimension.setName(phoneName.get(call2));
+        System.out.println("维度: 被叫人:" + call2 + "\t" + phoneName.get(call2));
 
-        //年维度
-        commDimension.setContactDimension(contactDimension);
-        commDimension.setDateDimension(yearDimension);
-        context.write(commDimension,v);
-
-        //月维度
-        commDimension.setDateDimension(monthDimension);
-        context.write(commDimension,v);
-
-        //天维度
-        commDimension.setDateDimension(dayDimension);
-        context.write(commDimension,v);
+        commMapper.setContactDimension(contactDimension);
+        commMapper.setDateDimension(yearMapper);
+        //年维度书写
+        context.write(commMapper,v);
+        commMapper.setDateDimension(monthMapper);
+        //月维度书写
+        context.write(commMapper,v);
+        commMapper.setDateDimension(dayMapper);
+        //日维度书写
+        context.write(commMapper,v);
     }
 }

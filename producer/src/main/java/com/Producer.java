@@ -17,12 +17,12 @@ import java.util.HashMap;
  */
 
 public class Producer {
-        ArrayList<String> phoneList = new ArrayList<>();
-        HashMap<String, String> contacts  = new HashMap<>();
+    ArrayList<String> phoneList = new ArrayList<>();
+    HashMap<String, String> contacts = new HashMap<>();
     private String start = "2019-01-01";
     private String end = "2020-01-01";
-    public void init(){
 
+    public void init() {
         phoneList.add("15369468720");
         phoneList.add("19920860202");
         phoneList.add("18411925860");
@@ -43,11 +43,6 @@ public class Producer {
         phoneList.add("19879419704");
         phoneList.add("16480981069");
         phoneList.add("18674257265");
-        phoneList.add("18302820904");
-        phoneList.add("15133295266");
-        phoneList.add("17868457605");
-        phoneList.add("15490732767");
-        phoneList.add("15064972307");
 
         contacts.put("15369468720", "李雁");
         contacts.put("19920860202", "卫艺");
@@ -70,12 +65,13 @@ public class Producer {
         contacts.put("16480981069", "沈丹");
         contacts.put("18674257265", "褚美丽");
     }
+
     private String productLog() throws ParseException {
         String callee;
         String caller;
         String buildTime;
-        int  dura;
-        int callerIndex = (int)(Math.random()*phoneList.size());
+        int dura;
+        int callerIndex = (int) (Math.random() * phoneList.size());
         caller = phoneList.get(callerIndex);
         while (true) {
             int calleeIndex = (int) (Math.random() * phoneList.size());
@@ -85,23 +81,24 @@ public class Producer {
             }
         }
 
-            //2.随机生成通话建立时间
-            buildTime = randomBuildTime(start,end);
+        //2.随机生成通话建立时间
+        buildTime = randomBuildTime(start, end);
 
-            //3.随机生成通话时长
-            dura = (int) (Math.random() * 30 * 60) + 1;
-            String duration = new DecimalFormat("0000").format(dura);
+        //3.随机生成通话时长
+        dura = (int) (Math.random() * 30 * 60) + 1;
+        String duration = new DecimalFormat("0000").format(dura);
 
-        return  caller + "," + callee + "," + buildTime + "," + duration + "\n";
+        return caller + "," + callee + "," + buildTime + "," + duration + "\n";
     }
 
     /**
      * 随机生成通话建立时间
+     *
      * @param start
      * @param end
      * @return
      */
-    private String randomBuildTime(String start,String end) throws ParseException {
+    private String randomBuildTime(String start, String end) throws ParseException {
         SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
         SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         long startPoint = sdf1.parse(start).getTime();
@@ -119,19 +116,16 @@ public class Producer {
             System.out.println(log);
             osw.write(log);
             osw.flush();
-            Thread.sleep(300);
+            Thread.sleep(5);
         }
 
     }
 
     public static void main(String[] args) throws ParseException, InterruptedException, IOException {
-        if (args.length <= 0) {
-            System.out.println("没有参数");
-            System.exit(0);
-        }
+
         Producer producer = new Producer();
         producer.init();
-        producer.writeLog(args[0]);
+        producer.writeLog("log");
 
     }
 

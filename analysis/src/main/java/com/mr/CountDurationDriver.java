@@ -7,6 +7,8 @@ import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.mapreduce.TableMapReduceUtil;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
+import org.apache.hadoop.mapreduce.MRConfig;
+import org.apache.hadoop.mapreduce.MRJobConfig;
 
 import java.io.IOException;
 
@@ -16,8 +18,16 @@ import java.io.IOException;
  */
 public class CountDurationDriver {
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
-        //1.获取配置&job对象
+        System.setProperty("HADOOP_USER_NAME", "slash");
+
         Configuration configuration = HBaseConfiguration.create();
+        // 是否跨平台提交任务
+        configuration.set(MRConfig.MAPREDUCE_APP_SUBMISSION_CROSS_PLATFORM, "true");
+        // 究竟运行在本地还是在集群
+        configuration.set(MRConfig.FRAMEWORK_NAME, MRConfig.YARN_FRAMEWORK_NAME);
+        // jar包
+        configuration.set(MRJobConfig.JAR, "D:\\devlope\\workspace\\ct\\analysis\\target\\analysis-1.0-SNAPSHOT-jar-with-dependencies.jar");
+
         Job job = Job.getInstance(configuration);
 
         //2.设置jar

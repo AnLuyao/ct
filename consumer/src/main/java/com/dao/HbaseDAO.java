@@ -92,6 +92,8 @@ public class HbaseDAO {
         String regionHash = HbaseUtil.getRegionHash(caller, buildTime, regions);
         /**
          * 获取rowkey：regionHash_caller_buildTime_callee_duration
+         *
+         * 15064972307,14473548449,2019-09-23 19:35:17,0887
          */
         String rowKey = HbaseUtil.getRowKey(regionHash, caller, buildTime, callee,flag, duration);
         /**
